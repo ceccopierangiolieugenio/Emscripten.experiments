@@ -1,0 +1,41 @@
+<html>
+<head>
+<script type="text/javascript" src="out.js/invert_string.js"></script>
+</head>
+
+<body>
+
+<h1>Emscripten Tests</h1>
+<h2>(test1) simple c String inversion</h2>
+<a href="src/invert_string.c">src/invert_string.c</a>
+<pre id='test1'></pre>
+<script>
+	/* bind the exported function */
+	var invert_string = Module.cwrap('invert_string', 'string', ['string'])
+
+	var si = document.getElementById('test1');
+	var str = "";
+
+	str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
+	si.innerHTML += "Original: \"" + str + "\"\n";
+	str = invert_string(str);
+	si.innerHTML += "Inverted: \"" + str + "\"\n\n";
+
+	str = "   abcde 1234 567  1    89123 ";
+	si.innerHTML += "Original: \"" + str + "\"\n";
+	str = invert_string(str);
+	si.innerHTML += "Inverted: \"" + str + "\"\n\n";
+
+	str = "   ab 1 567  1   89123 ";
+	si.innerHTML += "Original: \"" + str + "\"\n";
+	str = invert_string(str);
+	si.innerHTML += "Inverted: \"" + str + "\"\n\n";
+
+	str = "x";
+	si.innerHTML += "Original: \"" + str + "\"\n";
+	str = invert_string(str);
+	si.innerHTML += "Inverted: \"" + str + "\"\n\n";
+</script>
+
+</body>
+</html> 
