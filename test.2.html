@@ -1,0 +1,23 @@
+<html>
+<body>
+<h1>Emscripten Tests</h1>
+<h2>(test2) simple c++ Class</h2>
+<a href="src/test.2/BaseMath.cpp">BaseMath.cpp</a>
+<a href="src/test.2/BaseMath.hpp">BaseMath.hpp</a>
+<a href="src/test.2/BaseMath.idl">BaseMath.idl</a>
+<pre id='test2' style="border-style: solid;"></pre>
+<script type="text/javascript" src="out.js/BaseMath.js"></script>
+<script>
+	var si = document.getElementById('test2');
+	var str = "";
+	var bm = new BaseMath();
+	si.innerHTML += " 1 +   2 = " +  bm.sum( 1,  2) + "\n";
+	si.innerHTML += " 3 +   4 = " +  bm.sum( 3,  4) + "\n";
+	si.innerHTML += "10 + 100 = " +  bm.sum(10,100) + "\n";
+	si.innerHTML += "\nLog:\n";
+	si.innerHTML += bm.getFormattedLog("Test 2 log: ");
+
+</script>
+</body>
+</html> 
+

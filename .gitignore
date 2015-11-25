@@ -1,0 +1,4 @@
+glue.*
+*.pkl
+*.out
+*.swp
