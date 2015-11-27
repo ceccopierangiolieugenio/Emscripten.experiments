@@ -15,6 +15,9 @@
 all:
 	emcc Attractors.c \
 		-o ../../out.js/Attractors.js
+	# The Attractors.html and Attractors.js files can be generated 
+	# using this command:
+	#    emcc Attractors.c -o Attractors.html
 
 clean:
 	rm glue.* *.pkl *.out ../../out.js/Attractors.js
