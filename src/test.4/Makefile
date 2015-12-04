@@ -13,12 +13,12 @@
 # limitations under the License.
 
 all:
-	python ${EMSCRIPTEN}/tools/webidl_binder.py AudioProc.idl glue.AudioProc
-	emcc AudioProc.cpp \
-		-o ../../out.js/AudioProc.js \
-		--post-js glue.AudioProc.js \
+	python ${EMSCRIPTEN}/tools/webidl_binder.py ArrayProc.idl glue.ArrayProc
+	emcc ArrayProc.cpp \
+		-o ../../out.js/ArrayProc.js \
+		--post-js glue.ArrayProc.js \
 		-s TOTAL_MEMORY=33554432
 
 clean:
-	rm glue.* *.pkl *.out ../../out.js/AudioProc.js
+	rm glue.* *.pkl *.out ../../out.js/ArrayProc.js
 

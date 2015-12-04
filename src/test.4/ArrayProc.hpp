@@ -17,14 +17,9 @@
 #include <vector>
 #include <string>
 
-class AudioProc {
+class ArrayProc {
 	public:
-		AudioProc();
-		int sum(int, int);
-		char * getFormattedLog(const char*);
-		void loadSamples(const void *, int);
-	private:
-		std::vector<std::string> log;
-		float * samples;
+		ArrayProc();
+		void process(const float, void *, const int);
 };
 

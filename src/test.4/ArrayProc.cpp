@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-interface AudioProc {
-	void AudioProc();
-	long sum(long a, long b);
-	DOMString getFormattedLog(DOMString prefix);
-	void loadSamples(any s, long n);
-};
+#include "ArrayProc.hpp"
+#include "glue.ArrayProc.cpp"
+
+ArrayProc::ArrayProc(){}
+
+/* Process the input array multiplying any element by "m" */
+void ArrayProc::process(const float m, void * s, const int n){
+	float * in_s = (float *)s;
+	for (int i=0 ; i<n ; i++ )
+		in_s[i]*=m;
+}
 
