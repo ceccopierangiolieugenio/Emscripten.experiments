@@ -1,0 +1,104 @@
+<html>
+<body>
+<h1>Emscripten Tests</h1>
+<h2>(test4) simple audio test</h2>
+<a href="https://github.com/ceccopierangiolieugenio/Emscripten.experiments/tree/gh-pages/src/test.4">sources</a><br>
+<input type="file" id="audio" onchange="playFile(this)" />
+<audio id="sound" controls></audio>
+<pre id='test4' style="border-style: solid;"></pre>
+<input type="file" id="audio2" />
+<script type="text/javascript" src="out.js/AudioProc.js"></script>
+<script type="text/javascript">
+	var ap = new AudioProc();
+	var si = document.getElementById('test4');
+
+	function playFile(obj) {
+		var sound = document.getElementById('sound');
+		var readerData = new FileReader();
+		readerData.onload = ( 
+			function(audio) {
+				return function(e) {
+					audio.src = e.target.result;
+				};
+			})(sound);
+		readerData.addEventListener('load', 
+			function() {
+				var s = document.getElementById("sound");
+				s.play();
+			});
+		readerData.readAsDataURL(obj.files[0]);
+
+		var audioContext = new AudioContext();
+		var readerBuffer = new FileReader();
+		readerBuffer.onload = ( 
+			function() {
+				return function(e) {
+					var arrayBuffer = e.target.result;
+					console.log("arrayBuffer:");
+					console.log(arrayBuffer);
+					audioContext.decodeAudioData(arrayBuffer, decodedDone);
+				};
+			})();
+		readerBuffer.readAsArrayBuffer(obj.files[0]);
+	}
+
+	function decodedDone(decoded) {
+		var typedArray = new Uint32Array(decoded, 1, decoded.length);
+		console.log("decoded");
+		console.log(decoded);
+		console.log("typedArray");
+		console.log(typedArray);
+
+		for (i=0; i<10; i++)
+			console.log(typedArray[i]);
+	}
+
+	var openFile2 = function(event) {
+		var input = event.target;
+		var audioContext = new AudioContext();
+		
+		var reader = new FileReader();
+		reader.onload = function(){
+			var arrayBuffer = reader.result;
+			console.log("arrayBuffer:");
+			console.log(arrayBuffer);
+			audioContext.decodeAudioData(arrayBuffer, decodedDone);
+		};
+		reader.readAsArrayBuffer(input.files[0]);
+	};
+	function decodedDone(decoded) {
+		var typedArray = new Float32Array(decoded.length);
+		typedArray=decoded.getChannelData(0);
+		console.log("typedArray:");
+		console.log(typedArray);
+
+		// Create example data to test float_multiply_array
+		var data = typedArray;
+		
+		// Get data byte size, allocate memory on Emscripten heap, and get pointer
+		var nDataBytes = data.length * data.BYTES_PER_ELEMENT;
+		var dataPtr = Module._malloc(nDataBytes);
+		
+		// Copy data to Emscripten heap (directly accessed from Module.HEAPU8)
+		var dataHeap = new Uint8Array(Module.HEAPU8.buffer, dataPtr, nDataBytes);
+		dataHeap.set(new Uint8Array(data.buffer));
+		
+		// Call function and get result
+		//float_multiply_array(2, dataHeap.byteOffset, data.length);
+		ap.loadSamples(dataHeap.byteOffset, data.length);
+		var result = new Float32Array(dataHeap.buffer, dataHeap.byteOffset, data.length);
+		
+		console.log(Module.HEAPU8.buffer);
+		console.log(dataPtr);
+		console.log(data);
+		console.log(result);
+		
+		// Free memory
+		Module._free(dataHeap.byteOffset);
+	}
+	document.getElementById('audio2').addEventListener('change', openFile2, false);
+</script>
+
+</body>
+</html> 
+

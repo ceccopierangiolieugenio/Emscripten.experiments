@@ -1,0 +1,35 @@
+<html>
+<body>
+<h1>Emscripten Tests</h1>
+<h2>(test4) simple audio test</h2>
+<a href="https://github.com/ceccopierangiolieugenio/Emscripten.experiments/tree/gh-pages/src/test.4">sources</a><br>
+<input type="file" id="audio" onchange="playFile(this)" />
+<audio id="sound" controls></audio>
+<pre id='test4' style="border-style: solid;"></pre>
+<script type="text/javascript" src="out.js/AudioProc.js"></script>
+<script type="text/javascript">
+	var ap = new AudioProc();
+	var si = document.getElementById('test4');
+	function playFile(obj) {
+		var sound = document.getElementById('sound');
+		var reader = new FileReader();
+		reader.onload = ( 
+			function(audio) {
+				return function(e) {
+					audio.src = e.target.result;
+				};
+			})(sound);
+		reader.addEventListener('load', 
+			function() {
+				var s = document.getElementById("sound");
+				s.play();
+				var str = "";
+				si.loadSamples(s.getChannelData(),s.getChannelData().length());
+			});
+		reader.readAsDataURL(obj.files[0]);
+	}
+</script>
+
+</body>
+</html> 
+
