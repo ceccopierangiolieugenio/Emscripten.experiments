@@ -1,0 +1,82 @@
+<html>
+<body>
+<h1>Emscripten Tests</h1>
+<h2>(test5) simple audio test</h2>
+<a href="https://github.com/ceccopierangiolieugenio/Emscripten.experiments/tree/gh-pages/src/test.5">sources</a><br>
+<input type="file" id="audioLoad" />
+<button type="button" id="play" disabled>Play</button>
+<button type="button" id="playRev" disabled>Play Reverse</button>
+<pre id='test5' style="border-style: solid;"></pre>
+<script type="text/javascript" src="out.js/AudioProc.js"></script>
+<script type="text/javascript">
+	var ap = new AudioProc();
+	var si = document.getElementById('test5');
+
+	var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+	var source;
+	var data3, data3Rev;
+
+	document.getElementById('audioLoad').onchange = function(event){
+		si.innerHTML += "Loading " + event.target.files[0].name + "<br>";
+		var reader = new FileReader();
+		reader.onload = function(){
+			var arrayBuffer = reader.result;
+			audioCtx.decodeAudioData(arrayBuffer,function(decodedData){
+				data3    = decodedData;
+				data3Rev = audioCtx.createBuffer(1 , data3.length, data3.sampleRate );
+				document.getElementById('play').disabled = false;
+				document.getElementById('playRev').disabled = false;
+				si.innerHTML += "Loaded " + event.target.files[0].name + "<br>";
+				si.innerHTML += "Channels:    " + data3.numberOfChannels + "<br>";
+				si.innerHTML += "Samples:     " + data3.length + "<br>";
+				si.innerHTML += "Sample Rate: " + data3.sampleRata + "<br>";
+			});
+		};
+		reader.readAsArrayBuffer(event.target.files[0]);
+	};
+
+	document.getElementById('play').onclick = function(){
+		source = audioCtx.createBufferSource();
+		source.buffer = data3;
+		source.connect(audioCtx.destination);
+		source.playbackRate.value = 1.0;
+		source.loop = false;
+		source.start(0);
+	};
+
+	document.getElementById('playRev').onclick = function(){
+		source = audioCtx.createBufferSource();
+
+		// Create example data to test
+		var data = data3.getChannelData(0);
+		
+		// Get data byte size, allocate memory on Emscripten heap, and get pointer
+		var nDataBytes = data.length * data.BYTES_PER_ELEMENT;
+		var dataPtr = Module._malloc(nDataBytes);
+		
+		// Copy data to Emscripten heap (directly accessed from Module.HEAPU8)
+		var dataHeap = new Uint8Array(Module.HEAPU8.buffer, dataPtr, nDataBytes);
+		dataHeap.set(new Uint8Array(data.buffer));
+		
+		// Call function and get result
+		ap.invertSamples(dataHeap.byteOffset, data.length);
+		var result = new Float32Array(dataHeap.buffer, dataHeap.byteOffset, data.length);
+
+		// Copy back the data to the Audio Stream
+		data = data3Rev.getChannelData(0);
+		for(var i=0;i<data3Rev.length;i++)
+			data[i]=result[i];
+
+		source.buffer = data3Rev;
+		source.connect(audioCtx.destination);
+		source.playbackRate.value = 1.0;
+		source.loop = false;
+		source.start(0);
+	};
+</script>
+</script>
+</script>
+
+</body>
+</html> 
+
