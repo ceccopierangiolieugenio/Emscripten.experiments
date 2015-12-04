@@ -8,8 +8,7 @@ Placeholder for few ([ASM.js](http://asmjs.org)) experiments using [Emscripten](
 
 * Build the project
  
-        EMSCRIPTEN=<INSTALLATION_PATH>
-        PATH=$EMSCRIPTEN:$PATH
+        source ~/<EMSDK_PATH>/emsdk_portable/emsdk_env.sh
         make -C src
 
 ## Tests
