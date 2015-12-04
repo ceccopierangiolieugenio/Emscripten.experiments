@@ -13,7 +13,7 @@ This experiment is loosely based on [<a href="http://kapadia.github.io/emscripte
 	// Create example data to test float_multiply_array
 	var data = new Float32Array([0.1, 0.2, 0.4, 0.8, 1.6, 3.2]);
 	si.innerHTML += "Input Array:<br>";
-	si.innerHTML += data.toSource() + "<br>";
+	si.innerHTML += JSON.stringify(data) + "<br>";
 	
 	// Get data byte size, allocate memory on Emscripten heap, and get pointer
 	var nDataBytes = data.length * data.BYTES_PER_ELEMENT;
@@ -28,7 +28,7 @@ This experiment is loosely based on [<a href="http://kapadia.github.io/emscripte
 	var result = new Float32Array(dataHeap.buffer, dataHeap.byteOffset, data.length);
 
 	si.innerHTML += "Processed Array (mult=0.2):<br>";
-	si.innerHTML += result.toSource();
+	si.innerHTML += JSON.stringify(result);
 	
 	// Free memory
 	Module._free(dataHeap.byteOffset);
