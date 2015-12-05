@@ -13,7 +13,7 @@
 # limitations under the License.
 
 all:
-	python ${EMSCRIPTEN}/tools/webidl_binder.py AudioProc.idl glue.AudioProc
+	python2 ${EMSCRIPTEN}/tools/webidl_binder.py AudioProc.idl glue.AudioProc
 	emcc AudioProc.cpp \
 		-o ../../out.js/AudioProc.js \
 		--post-js glue.AudioProc.js \

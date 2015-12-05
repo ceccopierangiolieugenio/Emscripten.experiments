@@ -13,7 +13,7 @@
 # limitations under the License.
 
 all:
-	python ${EMSCRIPTEN}/tools/webidl_binder.py BaseMath.idl glue.BaseMath
+	python2 ${EMSCRIPTEN}/tools/webidl_binder.py BaseMath.idl glue.BaseMath
 	emcc BaseMath.cpp \
 		-o ../../out.js/BaseMath.js \
 		--post-js glue.BaseMath.js \

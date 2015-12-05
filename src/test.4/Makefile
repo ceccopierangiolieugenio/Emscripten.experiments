@@ -13,7 +13,7 @@
 # limitations under the License.
 
 all:
-	python ${EMSCRIPTEN}/tools/webidl_binder.py ArrayProc.idl glue.ArrayProc
+	python2 ${EMSCRIPTEN}/tools/webidl_binder.py ArrayProc.idl glue.ArrayProc
 	emcc ArrayProc.cpp \
 		-o ../../out.js/ArrayProc.js \
 		--post-js glue.ArrayProc.js \
